@@ -101,21 +101,34 @@
         }
 
         function generatePercentagesTable(oneRepMax) {
-            const percentages = [40, 50, 60, 70, 80, 85, 90, 95, 100];
+            const percentages = [
+                { percent: 40, reps: 25 },
+                { percent: 50, reps: 20 },
+                { percent: 60, reps: 15 },
+                { percent: 70, reps: 12 },
+                { percent: 80, reps: 8 },
+                { percent: 85, reps: 6 },
+                { percent: 90, reps: 4 },
+                { percent: 95, reps: 2 },
+                { percent: 100, reps: 1 }
+            ];
+
             let tableHTML = `
                 <table>
                     <tr>
                         <th>Percentage</th>
                         <th>Weight (lbs)</th>
+                        <th>Repetitions</th>
                     </tr>
             `;
 
-            percentages.forEach(percent => {
-                const weightAtPercent = (oneRepMax * (percent / 100)).toFixed(2);
+            percentages.forEach(item => {
+                const weightAtPercent = (oneRepMax * (item.percent / 100)).toFixed(2);
                 tableHTML += `
                     <tr>
-                        <td>${percent}%</td>
+                        <td>${item.percent}%</td>
                         <td>${weightAtPercent}</td>
+                        <td>${item.reps}</td>
                     </tr>
                 `;
             });
