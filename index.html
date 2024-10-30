@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1-Rep Max Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            max-width: 300px;
+            width: 100%;
+        }
+        h1 {
+            font-size: 1.5em;
+            text-align: center;
+            color: #333;
+        }
+        label, input, button {
+            display: block;
+            width: 100%;
+            margin: 10px 0;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1em;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .result {
+            text-align: center;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        table {
+            width: 100%;
+            margin-top: 15px;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 8px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>1-Rep Max Calculator</h1>
+        <form id="repMaxForm">
+            <label for="weight">Weight Lifted (lbs):</label>
+            <input type="number" id="weight" min="1" required>
+            
+            <label for="reps">Repetitions Completed:</label>
+            <input type="number" id="reps" min="1" max="10" required>
+            
+            <button type="button" onclick="calculateOneRepMax()">Calculate 1RM</button>
+        </form>
+        <div class="result" id="result"></div>
+        <div id="percentagesTable"></div>
+    </div>
+
+    <script>
+        function calculateOneRepMax() {
+            const weight = parseFloat(document.getElementById("weight").value);
+            const reps = parseInt(document.getElementById("reps").value);
+            let oneRepMax = 0;
+
+            if (reps === 1) {
+                oneRepMax = weight; // If 1 rep was completed, 1RM is the weight itself
+            } else {
+                // Epley formula for 1RM estimation
+                oneRepMax = weight * (1 + reps / 30);
+            }
+
+            document.getElementById("result").textContent = `Estimated 1RM: ${oneRepMax.toFixed(2)} lbs`;
+
+            // Generate the percentages table
+            generatePercentagesTable(oneRepMax);
+        }
+
+        function generatePercentagesTable(oneRepMax) {
+            const percentages = [40, 50, 60, 70, 80, 85, 90, 95, 100];
+            let tableHTML = `
+                <table>
+                    <tr>
+                        <th>Percentage</th>
+                        <th>Weight (lbs)</th>
+                    </tr>
+            `;
+
+            percentages.forEach(percent => {
+                const weightAtPercent = (oneRepMax * (percent / 100)).toFixed(2);
+                tableHTML += `
+                    <tr>
+                        <td>${percent}%</td>
+                        <td>${weightAtPercent}</td>
+                    </tr>
+                `;
+            });
+
+            tableHTML += `</table>`;
+            document.getElementById("percentagesTable").innerHTML = tableHTML;
+        }
+    </script>
+</body>
+</html>
