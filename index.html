@@ -86,11 +86,12 @@
             const reps = parseInt(document.getElementById("reps").value);
             let oneRepMax = 0;
 
-            if (reps === 1) {
-                oneRepMax = weight; // If 1 rep was completed, 1RM is the weight itself
+            // Use the Brzycki formula for 1RM estimation
+            if (reps > 0 && reps <= 10) {
+                oneRepMax = weight / (1.0278 - (0.0278 * reps));
             } else {
-                // Epley formula for 1RM estimation
-                oneRepMax = weight * (1 + reps / 30);
+                document.getElementById("result").textContent = "Please enter reps between 1 and 10.";
+                return;
             }
 
             document.getElementById("result").textContent = `Estimated 1RM: ${oneRepMax.toFixed(2)} lbs`;
